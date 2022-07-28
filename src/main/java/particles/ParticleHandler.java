@@ -28,21 +28,28 @@ public class ParticleHandler
         return particles.get(index);
     }
 
-    private ArrayList<Particle> addParticles(int numParticles)
+    public void addParticle()
     {
-        ArrayList<Particle> particles = new ArrayList<>();
         Random r = new Random(200);
         double maxSpeed = 2;
         double minSpeed = -2;
         double maxMass = 2;
         double minMass = 1;
 
+        particles.add(new Particle(this,
+                new Vector2(r.nextInt(scene.getWidth()), r.nextInt(scene.getHeight())),
+                new Vector2((float) (r.nextDouble(maxSpeed - minSpeed + 1) + minSpeed), (float) (r.nextDouble(maxSpeed - minSpeed + 1) + minSpeed)), r.nextDouble(maxMass - minMass + 1) + minMass));
+    }
+
+    private ArrayList<Particle> addParticles(int numParticles)
+    {
+        ArrayList<Particle> particles = new ArrayList<>();
+
         for(int i = 0; i < numParticles; i++)
         {
-            particles.add(new Particle(this,
-                    new Vector2(r.nextInt(scene.getWidth()), r.nextInt(scene.getHeight())),
-                    new Vector2((float) (r.nextDouble(maxSpeed - minSpeed + 1) + minSpeed), (float) (r.nextDouble(maxSpeed - minSpeed + 1) + minSpeed)), r.nextDouble(maxSpeed - minMass + 1) + minMass));
+            addParticle();
         }
+
         return particles;
     }
 
