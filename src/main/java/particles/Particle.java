@@ -20,7 +20,18 @@ public class Particle
         this.position = position;
         this.velocity = velocity;
         this.mass = mass;
-        color = new Color((int) (Math.random() * 256), (int) (Math.random() * 256), (int) (Math.random() * 256));
+        //color = new Color((int) (Math.random() * 256), (int) (Math.random() * 256), (int) (Math.random() * 256));
+
+        double f = 1 / mass;
+        double r = (1 - f) * 255;
+        double g = f * 255;
+
+        if(r > 255) r = 255;
+        if(r < 0) r = 0;
+        if(g > 255) g = 255;
+        if(g < 0) g = 0;
+
+        color = new Color((int) r, (int) g, 0);
         radius = 5;
     }
 
@@ -99,8 +110,8 @@ public class Particle
                 if(collides(p))
                 {
                     Vector2 tmpVelocity = new Vector2(velocity);
-                    velocity.set((float) (p.getMass() * p.velocity.x / mass), (float) (p.getMass() * p.velocity.y / mass));
-                    p.setVelocity(new Vector2((float) (mass * tmpVelocity.x / p.getMass()), (float) (mass * tmpVelocity.y / p.getMass())));
+                    velocity.set((float) (((mass - p.getMass()) * velocity.x + 2 * p.getMass() * p.getVelocity().x) / (mass + p.getMass())), (float) (((mass - p.getMass()) * velocity.y + 2 * p.getMass() * p.getVelocity().y) / (mass + p.getMass())));
+                    p.setVelocity(new Vector2((float) (((p.getMass() - mass) * p.getVelocity().x + 2 * mass * tmpVelocity.x) / (mass + p.getMass())), (float) (((p.getMass() - mass) * p.getVelocity().y + 2 * mass * tmpVelocity.y) / (mass + p.getMass()))));
                 }
             }
         }
